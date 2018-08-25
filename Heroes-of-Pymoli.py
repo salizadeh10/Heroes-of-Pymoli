@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[32]:
+# In[121]:
 
 
 # Dependencies and Setup
@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 
 
-# In[33]:
+# In[122]:
 
 
 # Load the file
@@ -19,20 +19,20 @@ dataFile = "purchase_data.csv"
 purchase_data_pd = pd.read_csv(dataFile)
 
 
-# In[34]:
+# In[123]:
 
 
 purchase_data_pd.head()
 
 
-# In[35]:
+# In[124]:
 
 
 player_count = len(purchase_data_pd["SN"].value_counts())
 print("Total Number of Players: " + str(player_count))
 
 
-# In[36]:
+# In[125]:
 
 
 # Purchasing Analysis (Total)
@@ -42,7 +42,7 @@ print("Total Number of Players: " + str(player_count))
 # Display the summary data frame
 
 
-# In[37]:
+# In[126]:
 
 
 # get number of unique purchases
@@ -50,7 +50,7 @@ unique_items = len(purchase_data_pd["Item ID"].value_counts())
 print("Number of unique purchase items: " + str(unique_items))
 
 
-# In[38]:
+# In[127]:
 
 
 # get the average price of items
@@ -58,7 +58,7 @@ avg_price = round(purchase_data_pd["Price"].mean(), 2)
 print("Average price of items is: " + str(avg_price))
 
 
-# In[39]:
+# In[128]:
 
 
 # get number of purchased 
@@ -66,7 +66,7 @@ number_of_purchases = len(purchase_data_pd["Purchase ID"].value_counts())
 print("Number of items purchased: " + str(number_of_purchases))
 
 
-# In[40]:
+# In[129]:
 
 
 # total revenue generated from sales
@@ -74,7 +74,7 @@ total_revenue = purchase_data_pd["Price"].sum()
 print("Total revenue is: " + str(total_revenue))
 
 
-# In[41]:
+# In[130]:
 
 
 # Create dataframe for number of items, avg sale price, number of purchases, and total revenue
@@ -90,7 +90,7 @@ purchase_df = pd.DataFrame([purchase_summary], columns = ["Number of Unique Item
 purchase_df.head()
 
 
-# In[42]:
+# In[131]:
 
 
 # Gender Demographics
@@ -130,7 +130,7 @@ demographics_df = demographics_df.set_index("Gender")
 demographics_df.style.format({"Percentage of Players": "{:.2f}%"})  
 
 
-# In[47]:
+# In[132]:
 
 
 # Purchasing Analysis (Gender)
@@ -140,7 +140,7 @@ demographics_df.style.format({"Percentage of Players": "{:.2f}%"})
 # Display the summary data frame
 
 
-# In[87]:
+# In[133]:
 
 
 # Purchase counts by Gender column
@@ -177,7 +177,49 @@ purchase_analysis_df = purchase_analysis_df.set_index("Gender")
 purchase_analysis_df
 
 
-# In[ ]:
+# In[134]:
+
+
+# Age Demographics
+# Establish bins for ages
+# Categorize the existing players using the age bins. Hint: use pd.cut()
+# Calculate the numbers and percentages by age group
+# Create a summary data frame to hold the results
+# Optional: round the percentage column to two decimal points
+# Display Age Demographics Table
+
+
+# In[138]:
+
+
+# Create the bins in which Data will be held
+# Age bins are 0, 10, 15, 19, 25, 30, 35, 40
+age_bins = [0, 9, 14, 19, 24, 29, 34, 39, 44]
+
+# Create the labels for bins
+age_groups_lables = ["<10", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40+"]
+
+# Add column of bins based on Age
+age_demographic_df = gender_dem_df
+age_demographic_df["Age Groups"] = pd.cut(gender_dem_df["Age"],age_bins, labels=age_groups_lables)
+
+
+#Calculate total count and percentage of those counts by age groups
+age_groupby = age_demographic_df.groupby('Age Groups')['SN'].nunique().reset_index()
+age_groupby["Percentage of Players"] = 100 * age_groupby["SN"]/age_groupby["SN"].sum()
+age_summary = age_groupby[["Age Groups", "Percentage of Players", "SN" ]].sort_values(["Age Groups"])
+age_summary = age_summary.reset_index(drop=True)
+
+# format columns
+age_summary["Percentage of Players"] = age_summary["Percentage of Players"].map("{:,.2f}".format)
+
+# set Indext to Age Groups
+age_demos_summary = age_summary.set_index("Age Groups")
+age_demos_summary = age_demos_summary.rename(columns = {"SN": "Total Count"}) 
+age_demos_summary
+
+
+# In[101]:
 
 
 get_ipython().system('jupyter nbconvert --to script Heroes-of-Pymoli.ipynb')
