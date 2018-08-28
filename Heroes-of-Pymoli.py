@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[605]:
+# In[734]:
 
 
 # Dependencies and Setup
@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 
 
-# In[606]:
+# In[735]:
 
 
 # Load the file
@@ -19,16 +19,17 @@ dataFile = "purchase_data.csv"
 purchase_data_pd = pd.read_csv(dataFile)
 
 
-# In[607]:
+# In[736]:
 
 
 purchase_data_pd.head()
 
 
-# In[608]:
+# In[737]:
 
 
 # Purchasing Analysis (Total)
+
 # Run basic calculations to obtain number of unique items, average price, etc.
 # Create a summary data frame to hold the results
 # Optional: give the displayed data cleaner formatting
@@ -59,10 +60,11 @@ purchase_df = pd.DataFrame([purchase_summary], columns = ["Number of Unique Item
 purchase_df.head()
 
 
-# In[609]:
+# In[738]:
 
 
 # Gender Demographics
+
 # Percentage and Count of Male Players
 # Percentage and Count of Female Players
 # Percentage and Count of Other / Non-Disclosed
@@ -101,10 +103,11 @@ demographics_df = demographics_df.set_index("Gender")
 demographics_df.style.format({"Percentage of Players": "{:.2f}%"})  
 
 
-# In[610]:
+# In[739]:
 
 
 # Purchasing Analysis (Gender)
+
 # Run basic calculations to obtain purchase count, avg. purchase price, avg. purchase total per person etc. by gender
 # Create a summary data frame to hold the results
 # Optional: give the displayed data cleaner formatting
@@ -142,10 +145,11 @@ purchase_by_gender_df = purchase_by_gender_df.set_index("Gender")
 purchase_by_gender_df
 
 
-# In[611]:
+# In[740]:
 
 
 # Age Demographics
+
 # Establish bins for ages
 # Categorize the existing players using the age bins. Hint: use pd.cut()
 # Calculate the numbers and percentages by age group
@@ -178,7 +182,7 @@ age_demos_summary = age_demos_summary.rename(columns = {"SN": "Total Count"})
 age_demos_summary
 
 
-# In[612]:
+# In[741]:
 
 
 # Purchasing Analysis (Age)
@@ -257,7 +261,7 @@ purchase_summary_by_age = purchase_summary_by_age.set_index("Age Groups")
 purchase_summary_by_age
 
 
-# In[647]:
+# In[756]:
 
 
 # Top Spenders
@@ -269,50 +273,14 @@ purchase_summary_by_age
 # Display a preview of the summary data frame
 
 top_spenders_df = age_demographic_df[["SN","Price","Item Name"]]
-
-# Get the total spend for each player and sort it
-top_spenders = top_spenders_df.groupby("SN").sum()
-top_spenders.sort_values(by = "Price", ascending = False, inplace = True)
-print(top_spenders.iloc[4,0])
-
-# Get top 5 spenders names
-top_spenders = list(top_spenders.index.values)
-top_spenders_names = [top_spenders[0], top_spenders[1], top_spenders[2], top_spenders[3], top_spenders[4]]
-
-# Get total purchase values for the top 5 spenders
-total_purchase_0 = top_spenders.iloc[0,0]
-total_purchase_1 = top_spenders.iloc[1,0]
-total_purchase_2 = top_spenders.iloc[2,0]
-total_purchase_3 = top_spenders.iloc[3,0]
-total_purchase_4 = top_spenders.iloc[4,0]
-total_purchace_4
-#top_purchase_values = [top_spenders.iloc[0,0], top_spenders.iloc[1,0], top_spenders.iloc[2,0], top_spenders.iloc[3,0],
-#                    top_spenders.iloc[4,0]]
-#top_purchase_values = [total_spent.iloc[0,0], total_spent.iloc[1,0], total_spent.iloc[2,0], total_spent.iloc[3,0],
-#                    top_spenders.iloc[4,0]]
-#total_purchase_0 = total_spent.iloc[0,0]
-#total_purchase_1 = total_spent.iloc[1,0]
-#total_purchase_2 = total_spent.iloc[2,0]
-#total_purchase_3 = total_spent.iloc[3,0]
-#total_purchase_4 = total_spent.iloc[4,0]
-#top_purchase_values = [total_spent.iloc[0,0], total_spent.iloc[1,0], total_spent.iloc[2,0], total_spent.iloc[3,0],
-#                      total_spent.iloc[4,0]]
-                       
-#print(top_purchase_values)               
-
-
-# In[655]:
-
-
-top_spenders_df = age_demographic_df[["SN","Price","Item Name"]]
 total_spent = top_spenders_df.groupby("SN").sum()
 total_spent.sort_values(by = "Price", ascending = False, inplace = True)
 
 # Get top 5 spenders names and make a list
-names = list(total_spent.index.values)
-top_names = [names[0],names[1],names[2],names[3],names[4]]
+top_spenders_names = list(total_spent.index.values)
+top_names = [names[0], names[1], names[2], names[3], names[4]]
 
-# TGet top 5 spenders purchase values and make a list
+# Get top 5 spenders purchase values and make a list
 total_purchase_values_0 = total_spent.iloc[0,0]
 total_purchase_values_1 = total_spent.iloc[1,0]
 total_purchase_values_2 = total_spent.iloc[2,0]
@@ -322,11 +290,11 @@ top_purchase_values = [total_spent.iloc[0,0], total_spent.iloc[1,0], total_spent
                       total_spent.iloc[4,0]]
 
 # Get top 5 spenders nummber of purchased and make a list
-top_purchase_counts_0 = top_spenders_df[top_spenders_df["SN"] == names[0]].count()[0]
-top_purchase_counts_1 = top_spenders_df[top_spenders_df["SN"] == names[1]].count()[0]
-top_purchase_counts_2 = top_spenders_df[top_spenders_df["SN"] == names[2]].count()[0]
-top_purchase_counts_3 = top_spenders_df[top_spenders_df["SN"] == names[3]].count()[0]
-top_purchase_counts_4 = top_spenders_df[top_spenders_df["SN"] == names[4]].count()[0]
+top_purchase_counts_0 = top_spenders_df[top_spenders_df["SN"] == top_names[0]].count()[0]
+top_purchase_counts_1 = top_spenders_df[top_spenders_df["SN"] == top_names[1]].count()[0]
+top_purchase_counts_2 = top_spenders_df[top_spenders_df["SN"] == top_names[2]].count()[0]
+top_purchase_counts_3 = top_spenders_df[top_spenders_df["SN"] == top_names[3]].count()[0]
+top_purchase_counts_4 = top_spenders_df[top_spenders_df["SN"] == top_names[4]].count()[0]
 top_purchase_counts = [top_purchase_counts_0, top_purchase_counts_1, top_purchase_counts_2, top_purchase_counts_3,
                        top_purchase_counts_4]
 
@@ -338,8 +306,13 @@ avg_price_3 = total_purchase_values_3 / top_purchase_counts_3
 avg_price_4 = total_purchase_values_4 / top_purchase_counts_4
 avg_prices = [avg_price_0, avg_price_1, avg_price_2, avg_price_3, avg_price_4]
 
+# Create the dictionary for transfer to dataframe later
+top_spenders_dict = ({"Purchase Count": top_purchase_counts,
+                    "Average Purchase Price": avg_prices,
+                    "Total Purchase Value": top_purchase_values,
+                    "SN": top_names})
 
-# Put it all in a data frame
+## Put it all in a data frame
 top_spenders_df = pd.DataFrame(top_spenders_dict)
 top_spenders_df = top_spenders_df.set_index("SN")
 top_spenders_df = top_spenders_df[["Purchase Count", "Average Purchase Price", "Total Purchase Value"]]
@@ -348,7 +321,70 @@ top_spenders_df = top_spenders_df[["Purchase Count", "Average Purchase Price", "
 top_spenders_df.style.format({"Average Purchase Price": "${:.2f}", "Total Purchase Value": "${:.2f}"})
 
 
-# In[572]:
+# In[761]:
+
+
+# Most Popular sellers - top sellers
+ 
+# Retrieve the Item ID, Item Name, and Item Price columns
+# Group by Item ID and Item Name. Perform calculations to obtain purchase count, item price, and total purchase value
+# Create a summary data frame to hold the results
+# Sort the purchase count column in descending order
+# Optional: give the displayed data cleaner formatting
+# Display a preview of the summary data frame
+
+top_sellers_df = age_demographic_df[["Item ID","Item Name", "Price"]]
+top_sellers = top_sellers_df.groupby("Item ID").count()
+top_sellers.sort_values(by = "Item Name", ascending = False, inplace = True)
+top_sellers_df = top_sellers_df.drop_duplicates(["Item ID", "Item Name"])
+
+# Get the list of top sellers names
+top_sellers_ids = [top_sellers.index[0], top_sellers.index[1], top_sellers.index[2], top_sellers.index[3], top_sellers.index[4]]
+
+# Build the top sellers list of names
+top_sellers_name_0 = top_sellers_df.loc[top_sellers_df["Item ID"] == top_sellers_ids[0], "Item Name"].item()
+top_sellers_name_1 = top_sellers_df.loc[top_sellers_df["Item ID"] == top_sellers_ids[1], "Item Name"].item()
+top_sellers_name_2 = top_sellers_df.loc[top_sellers_df["Item ID"] == top_sellers_ids[2], "Item Name"].item()
+top_sellers_name_3 = top_sellers_df.loc[top_sellers_df["Item ID"] == top_sellers_ids[3], "Item Name"].item()
+top_sellers_name_4 = top_sellers_df.loc[top_sellers_df["Item ID"] == top_sellers_ids[4], "Item Name"].item()
+top_sellers_names  = [top_item_name_0, top_item_name_1, top_item_name_2, top_item_name_3, top_item_name_4]
+
+# build the top sellers list of prices
+top_sellers_price_0 = top_sellers_df.loc[top_sellers_df["Item Name"] == top_sellers_names[0], "Price"].item()
+top_sellers_price_1 = top_sellers_df.loc[top_sellers_df["Item Name"] == top_sellers_names[1], "Price"].item()
+top_sellers_price_2 = top_sellers_df.loc[top_sellers_df["Item Name"] == top_sellers_names[2], "Price"].item()
+top_sellers_price_3 = top_sellers_df.loc[top_sellers_df["Item Name"] == top_sellers_names[3], "Price"].item()
+top_sellers_price_4 = top_sellers_df.loc[top_sellers_df["Item Name"] == top_sellers_names[4], "Price"].item()
+top_sellers_prices  = [top_sellers_price_0, top_sellers_price_1, top_sellers_price_2, top_sellers_price_3,top_sellers_price_4]
+print(top_sellers_prices)
+
+# get the list of top sellers purchase ounts
+top_sellers_counts = [top_sellers.iloc[0,0], top_sellers.iloc[1,0], top_sellers.iloc[2,0],
+                   top_sellers.iloc[3,0], top_sellers.iloc[4,0]]
+
+# Make a list of calculated total values for top sellers
+top_sellers_total_values = [(top_sellers.iloc[0,0] * top_sellers_price_0), (top_sellers.iloc[1,0] * top_sellers_price_1), 
+                          (top_sellers.iloc[2,0] * top_sellers_price_2), (top_sellers.iloc[3,0] * top_sellers_price_3), 
+                          (top_sellers.iloc[4,0] * top_sellers_price_4)]
+print(top_sellers_total_values)
+
+# Create the dictionary for transfer to dataframe later
+top_sellers_dict = {
+    "Purchase Count": top_sellers_counts,
+    "Item Price": top_sellers_prices,
+    "Total Purchase Value": top_sellers_counts,
+    "SN": top_names}
+
+# Put it all in a data frame
+top_sellers_df = pd.DataFrame(top_sellers_dict)
+top_sellers_df = top_sellers_df.set_index("SN")
+top_sellers_df = top_sellers_df[["Purchase Count", "Item Price", "Total Purchase Value"]]
+
+# Formatting prices
+top_sellers_df.style.format({"Item Price": "${:.2f}", "Total Purchase Value": "${:.2f}"})
+
+
+# In[685]:
 
 
 get_ipython().system('jupyter nbconvert --to script Heroes-of-Pymoli.ipynb')
