@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[734]:
+# In[775]:
 
 
 # Dependencies and Setup
@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 
 
-# In[735]:
+# In[776]:
 
 
 # Load the file
@@ -19,13 +19,13 @@ dataFile = "purchase_data.csv"
 purchase_data_pd = pd.read_csv(dataFile)
 
 
-# In[736]:
+# In[777]:
 
 
 purchase_data_pd.head()
 
 
-# In[737]:
+# In[778]:
 
 
 # Purchasing Analysis (Total)
@@ -60,7 +60,7 @@ purchase_df = pd.DataFrame([purchase_summary], columns = ["Number of Unique Item
 purchase_df.head()
 
 
-# In[738]:
+# In[779]:
 
 
 # Gender Demographics
@@ -103,7 +103,7 @@ demographics_df = demographics_df.set_index("Gender")
 demographics_df.style.format({"Percentage of Players": "{:.2f}%"})  
 
 
-# In[739]:
+# In[823]:
 
 
 # Purchasing Analysis (Gender)
@@ -145,7 +145,7 @@ purchase_by_gender_df = purchase_by_gender_df.set_index("Gender")
 purchase_by_gender_df
 
 
-# In[740]:
+# In[781]:
 
 
 # Age Demographics
@@ -182,7 +182,7 @@ age_demos_summary = age_demos_summary.rename(columns = {"SN": "Total Count"})
 age_demos_summary
 
 
-# In[741]:
+# In[782]:
 
 
 # Purchasing Analysis (Age)
@@ -261,7 +261,7 @@ purchase_summary_by_age = purchase_summary_by_age.set_index("Age Groups")
 purchase_summary_by_age
 
 
-# In[756]:
+# In[783]:
 
 
 # Top Spenders
@@ -321,7 +321,7 @@ top_spenders_df = top_spenders_df[["Purchase Count", "Average Purchase Price", "
 top_spenders_df.style.format({"Average Purchase Price": "${:.2f}", "Total Purchase Value": "${:.2f}"})
 
 
-# In[761]:
+# In[830]:
 
 
 # Most Popular sellers - top sellers
@@ -333,13 +333,14 @@ top_spenders_df.style.format({"Average Purchase Price": "${:.2f}", "Total Purcha
 # Optional: give the displayed data cleaner formatting
 # Display a preview of the summary data frame
 
-top_sellers_df = age_demographic_df[["Item ID","Item Name", "Price"]]
+top_sellers_df = age_demographic_df[["Item ID", "Item Name", "Price"]]
 top_sellers = top_sellers_df.groupby("Item ID").count()
 top_sellers.sort_values(by = "Item Name", ascending = False, inplace = True)
 top_sellers_df = top_sellers_df.drop_duplicates(["Item ID", "Item Name"])
 
 # Get the list of top sellers names
-top_sellers_ids = [top_sellers.index[0], top_sellers.index[1], top_sellers.index[2], top_sellers.index[3], top_sellers.index[4]]
+top_sellers_ids = [top_sellers.index[0], top_sellers.index[1], top_sellers.index[2], 
+                   top_sellers.index[3], top_sellers.index[4]]
 
 # Build the top sellers list of names
 top_sellers_name_0 = top_sellers_df.loc[top_sellers_df["Item ID"] == top_sellers_ids[0], "Item Name"].item()
@@ -356,7 +357,6 @@ top_sellers_price_2 = top_sellers_df.loc[top_sellers_df["Item Name"] == top_sell
 top_sellers_price_3 = top_sellers_df.loc[top_sellers_df["Item Name"] == top_sellers_names[3], "Price"].item()
 top_sellers_price_4 = top_sellers_df.loc[top_sellers_df["Item Name"] == top_sellers_names[4], "Price"].item()
 top_sellers_prices  = [top_sellers_price_0, top_sellers_price_1, top_sellers_price_2, top_sellers_price_3,top_sellers_price_4]
-print(top_sellers_prices)
 
 # get the list of top sellers purchase ounts
 top_sellers_counts = [top_sellers.iloc[0,0], top_sellers.iloc[1,0], top_sellers.iloc[2,0],
@@ -366,10 +366,11 @@ top_sellers_counts = [top_sellers.iloc[0,0], top_sellers.iloc[1,0], top_sellers.
 top_sellers_total_values = [(top_sellers.iloc[0,0] * top_sellers_price_0), (top_sellers.iloc[1,0] * top_sellers_price_1), 
                           (top_sellers.iloc[2,0] * top_sellers_price_2), (top_sellers.iloc[3,0] * top_sellers_price_3), 
                           (top_sellers.iloc[4,0] * top_sellers_price_4)]
-print(top_sellers_total_values)
 
 # Create the dictionary for transfer to dataframe later
 top_sellers_dict = {
+    "Item ID": top_sellers_ids,
+    "Item Name": top_sellers_names,
     "Purchase Count": top_sellers_counts,
     "Item Price": top_sellers_prices,
     "Total Purchase Value": top_sellers_counts,
@@ -377,14 +378,85 @@ top_sellers_dict = {
 
 # Put it all in a data frame
 top_sellers_df = pd.DataFrame(top_sellers_dict)
-top_sellers_df = top_sellers_df.set_index("SN")
-top_sellers_df = top_sellers_df[["Purchase Count", "Item Price", "Total Purchase Value"]]
+#top_sellers_df = top_sellers_df.set_index("SN")
+top_sellers_df = top_sellers_df[["Item ID", "Item Name", "Purchase Count", "Item Price", "Total Purchase Value"]]
+top_sellers_df = top_sellers_df.set_index("Item ID")
 
 # Formatting prices
 top_sellers_df.style.format({"Item Price": "${:.2f}", "Total Purchase Value": "${:.2f}"})
 
 
-# In[685]:
+# In[807]:
+
+
+# Most Profitable Items
+ 
+# Sort the above table by total purchase value in descending order
+# Optional: give the displayed data cleaner formatting
+# Display a preview of the data frame
+
+most_profitable_df = age_demographic_df[["Item ID","Item Name", "Price"]]
+most_profitable = most_profitable_df.groupby("Item ID").count()
+most_profitable.sort_values(by = "Item Name", ascending = False, inplace = True)
+most_profitable_df = most_profitable_df.drop_duplicates(["Item ID", "Item Name"])
+
+
+# Get the list of top sellers names
+most_profitable_ids = [most_profitable.index[0], most_profitable.index[1], most_profitable.index[2], most_profitable.index[3], most_profitable.index[4]]
+
+# Build the top sellers list of names
+most_profitable_name_0 = most_profitable_df.loc[most_profitable_df["Item ID"] == most_profitable_ids[0], "Item Name"].item()
+most_profitable_name_1 = most_profitable_df.loc[most_profitable_df["Item ID"] == most_profitable_ids[1], "Item Name"].item()
+most_profitable_name_2 = most_profitable_df.loc[most_profitable_df["Item ID"] == most_profitable_ids[2], "Item Name"].item()
+most_profitable_name_3 = most_profitable_df.loc[most_profitable_df["Item ID"] == most_profitable_ids[3], "Item Name"].item()
+most_profitable_name_4 = most_profitable_df.loc[most_profitable_df["Item ID"] == most_profitable_ids[4], "Item Name"].item()
+most_profitable_names  = [top_item_name_0, top_item_name_1, top_item_name_2, top_item_name_3, top_item_name_4]
+print(most_profitable_names)
+# build the top sellers list of prices
+most_profitable_price_0 = most_profitable_df.loc[most_profitable_df["Item ID"] == most_profitable_ids[0], "Price"].item()
+most_profitable_price_1 = most_profitable_df.loc[most_profitable_df["Item ID"] == most_profitable_ids[1], "Price"].item()
+most_profitable_price_2 = most_profitable_df.loc[most_profitable_df["Item ID"] == most_profitable_ids[2], "Price"].item()
+most_profitable_price_3 = most_profitable_df.loc[most_profitable_df["Item ID"] == most_profitable_ids[3], "Price"].item()
+most_profitable_price_4 = most_profitable_df.loc[most_profitable_df["Item ID"] == most_profitable_ids[4], "Price"].item()
+most_profitable_prices  = [most_profitable_price_0, most_profitable_price_1, most_profitable_price_2,
+                           most_profitable_price_3,most_profitable_price_4]
+print(most_profitable_prices)
+
+# Build the list of purchase counts
+most_profitable_df = most_profitable_df.groupby("Item Name").count()
+#df5 = df[["Item ID", "Item Name", "Price"]].groupby("Item Name").count()
+most_profitable_count_0 = most_profitable_df.loc[most_profitable_df.index == most_profitable_names[0], "Item ID"].item()
+most_profitable_count_1 = most_profitable_df.loc[most_profitable_df.index == most_profitable_names[1], "Item ID"].item()
+most_profitable_count_2 = most_profitable_df.loc[most_profitable_df.index == most_profitable_names[2], "Item ID"].item()
+most_profitable_count_3 = most_profitable_df.loc[most_profitable_df.index == most_profitable_names[3], "Item ID"].item()
+most_profitable_count_4 = most_profitable_df.loc[most_profitable_df.index == most_profitable_names[4], "Item ID"].item()
+most_profitable_counts = [most_profitable_count_0, most_profitable_count_1, most_profitable_count_2, 
+                          most_profitable_count_3, most_profitable_count_4]
+print(most_profitable_counts)
+# Make a list of calculated total values for top sellers
+most_profitable_total_values = [(most_profitable.iloc[0,0] * most_profitable_price_0), (most_profitable.iloc[1,0] * most_profitable_price_1), 
+                          (most_profitable.iloc[2,0] * most_profitable_price_2), (most_profitable.iloc[3,0] * most_profitable_price_3), 
+                          (most_profitable.iloc[4,0] * most_profitable_price_4)]
+
+
+# Create the dictionary for transfer to dataframe later
+most_profitable_dict = {
+    "item ID": most_profitable_ids,
+    "Purchase Count": most_profitable_counts,
+    "Item Price": most_profitable_prices,
+    "Total Purchase Value": most_profitable_counts,
+    "SN": top_names}
+
+# Put it all in a data frame
+most_profitable_df = pd.DataFrame(most_profitable_dict)
+most_profitable_df = most_profitable_df.set_index("SN")
+most_profitable_df = most_profitable_df[["Purchase Count", "Item Price", "Total Purchase Value"]]
+
+# Formatting prices
+most_profitable_df.style.format({"Item Price": "${:.2f}", "Total Purchase Value": "${:.2f}"})
+
+
+# In[800]:
 
 
 get_ipython().system('jupyter nbconvert --to script Heroes-of-Pymoli.ipynb')
